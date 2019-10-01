@@ -7,8 +7,19 @@
   "targets": {
     ".NETCoreApp,Version=v2.1": {
       "DataConvsersion/1.0.0": {
+        "dependencies": {
+          "MySql.Data": "6.10.7.0"
+        },
         "runtime": {
           "DataConvsersion.dll": {}
+        }
+      },
+      "MySql.Data/6.10.7.0": {
+        "runtime": {
+          "MySql.Data.dll": {
+            "assemblyVersion": "6.10.7.0",
+            "fileVersion": "6.10.7.0"
+          }
         }
       }
     }
@@ -16,6 +27,11 @@
   "libraries": {
     "DataConvsersion/1.0.0": {
       "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MySql.Data/6.10.7.0": {
+      "type": "reference",
       "serviceable": false,
       "sha512": ""
     }
