@@ -694,11 +694,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Benjamin Tolman\\source\\repos\\DataConvsersion\\DataConvsersion\\DataConvsersion.csproj",
+      "projectUniqueName": "\\\\vmware-host\\Shared Folders\\Documents\\GitHub\\project_and_portfolio_2\\DataConvsersion\\DataConvsersion\\DataConvsersion.csproj",
       "projectName": "DataConvsersion",
-      "projectPath": "C:\\Users\\Benjamin Tolman\\source\\repos\\DataConvsersion\\DataConvsersion\\DataConvsersion.csproj",
+      "projectPath": "\\\\vmware-host\\Shared Folders\\Documents\\GitHub\\project_and_portfolio_2\\DataConvsersion\\DataConvsersion\\DataConvsersion.csproj",
       "packagesPath": "C:\\Users\\Benjamin Tolman\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Benjamin Tolman\\source\\repos\\DataConvsersion\\DataConvsersion\\obj\\",
+      "outputPath": "\\\\vmware-host\\Shared Folders\\Documents\\GitHub\\project_and_portfolio_2\\DataConvsersion\\DataConvsersion\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
