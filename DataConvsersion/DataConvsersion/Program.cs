@@ -17,20 +17,38 @@ namespace DataConvsersion
 
             bool programIsRunning = true;
 
-            while(programIsRunning)
+            Console.WriteLine("Hello Admin, What Would You Like To Do Today?");
+
+            while (programIsRunning)
             {
                 _instance.MainMenu();
 
-                string selection = Validation.GetString("Please enter your selection: ").ToLower();
+                int selection = Validation.GetInt(0,1,"Please enter your selection number: ");
+
+                switch (selection)
+                {
+                    case 1:
+                        {
+                            ConvertJSON.ConnectToSQL();
+                        }
+                        break;
+                    case 0:
+                        {
+                            programIsRunning = false;
+                        }
+                        break;
+                }
+
+                
             }
-            
+
+            Console.WriteLine("");
+            Console.WriteLine("Goodbye Admin. ");
+            Utility.WaitForKey("Press any key to exit...");
         }
 
         private void MainMenu()
         {
-            Console.Clear();
-
-            Console.WriteLine("Hello Admin, What Would You Like To Do Today?");
             Console.WriteLine("");
             Console.WriteLine("1. Convert The Restaurant Profile Table From SQL To JSON");
             Console.WriteLine("2. Showcase Our 5 Star Rating System");
@@ -38,12 +56,8 @@ namespace DataConvsersion
             Console.WriteLine("4. Play A Card Game");
             Console.WriteLine("5. Exit");
             Console.WriteLine("");
-
         }
 
-        private void WaitForKey()
-        {
-            Console.WriteLine("Press Enter To Continue");
-        }
+       
     }
 }
