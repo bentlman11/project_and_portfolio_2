@@ -21,9 +21,8 @@ namespace DataConvsersion
             //Output Location
             //string _directory = @"../../output/";﻿﻿
 
-            string outputFolder = @"../../Output";
+            string outputFolder = @"../../Output/";
             Directory.CreateDirectory(outputFolder);
-            
             
 
             try
@@ -51,32 +50,32 @@ namespace DataConvsersion
                     columnNames.Add(rdr.GetName(i));
                 }
 
-                using (StreamWriter outStream = new StreamWriter(outputFolder + $@"/ResterauntProfiles.json"))
-                {
+                StreamWriter outStream = new StreamWriter(outputFolder + $@"/ResterauntProfiles.txt");
+                
                     outStream.WriteLine($"[");
-                    //Loop Through rows returned from mysql
+                    
                     while (rdr.Read())
                     {
-                        outStream.WriteLine("{");
-                        outStream.WriteLine($"\"{columnNames[0]}\" : {NullChecker(rdr, 0)},");
-                        outStream.WriteLine($"\"{columnNames[1]}\" : {NullChecker(rdr, 1)},");
-                        outStream.WriteLine($"\"{columnNames[2]}\" : {NullChecker(rdr, 2)},");
-                        outStream.WriteLine($"\"{columnNames[3]}\" : {NullChecker(rdr, 3)},");
-                        outStream.WriteLine($"\"{columnNames[4]}\" : {NullChecker(rdr, 4)},");
-                        outStream.WriteLine($"\"{columnNames[5]}\" : {NullChecker(rdr, 5)},");
-                        outStream.WriteLine($"\"{columnNames[6]}\" : {NullChecker(rdr, 6)},");
-                        outStream.WriteLine($"\"{columnNames[7]}\" : {NullChecker(rdr, 7)},");
-                        outStream.WriteLine($"\"{columnNames[8]}\" : {NullChecker(rdr, 8)},");
-                        outStream.WriteLine($"\"{columnNames[9]}\" : {NullChecker(rdr, 9)},");
-                        outStream.WriteLine($"\"{columnNames[10]}\" : {NullChecker(rdr, 10)},");
-                        outStream.WriteLine($"\"{columnNames[11]}\" : {NullChecker(rdr, 11)},");
-                        outStream.WriteLine($"\"{columnNames[12]}\" : {NullChecker(rdr, 12)},");
-                        outStream.WriteLine($"\"{columnNames[13]}\" : {NullChecker(rdr, 13)},");
-                        outStream.WriteLine("},");
+                    outStream.WriteLine("{");
+                    outStream.WriteLine($"\"{columnNames[0]}\" : {NullChecker(rdr, 0)},");
+                    outStream.WriteLine($"\"{columnNames[1]}\" : {NullChecker(rdr, 1)},");
+                    outStream.WriteLine($"\"{columnNames[2]}\" : {NullChecker(rdr, 2)},");
+                    outStream.WriteLine($"\"{columnNames[3]}\" : {NullChecker(rdr, 3)},");
+                    outStream.WriteLine($"\"{columnNames[4]}\" : {NullChecker(rdr, 4)},");
+                    outStream.WriteLine($"\"{columnNames[5]}\" : {NullChecker(rdr, 5)},");
+                    outStream.WriteLine($"\"{columnNames[6]}\" : {NullChecker(rdr, 6)},");
+                    outStream.WriteLine($"\"{columnNames[7]}\" : {NullChecker(rdr, 7)},");
+                    outStream.WriteLine($"\"{columnNames[8]}\" : {NullChecker(rdr, 8)},");
+                    outStream.WriteLine($"\"{columnNames[9]}\" : {NullChecker(rdr, 9)},");
+                    outStream.WriteLine($"\"{columnNames[10]}\" : {NullChecker(rdr, 10)},");
+                    outStream.WriteLine($"\"{columnNames[11]}\" : {NullChecker(rdr, 11)},");
+                    outStream.WriteLine($"\"{columnNames[12]}\" : {NullChecker(rdr, 12)},");
+                    outStream.WriteLine($"\"{columnNames[13]}\" : {NullChecker(rdr, 13)},");
+                    outStream.WriteLine("},");
                     }
-                    outStream.WriteLine($"]");
 
-                }
+                    outStream.WriteLine($"]");
+                
             }
             catch (MySqlException ex)
             {
@@ -90,7 +89,7 @@ namespace DataConvsersion
                 }
             }
             Console.WriteLine("Done");
-
+            Console.WriteLine(Path.GetFullPath(outputFolder));
             Console.ReadKey();
         }
 
