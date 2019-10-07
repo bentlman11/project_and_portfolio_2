@@ -8,11 +8,7 @@ namespace DataConvsersion
 
         static void Main(string[] args)
         {
-            //Database Location
-            //string cs = @"server= 127.0.0.1;userid=root;password=root;database=SampleRestaurantDatabase;port=8889";
-            //Output Location
-            //string _directory = @"../../output/";﻿﻿
-
+            
             _instance = new Program();
 
             bool programIsRunning = true;

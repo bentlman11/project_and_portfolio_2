@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using MySql;
+using System.IO;
 using MySql.Data.MySqlClient;
 
 namespace DataConvsersion
@@ -16,9 +16,18 @@ namespace DataConvsersion
             // Declare a MySQL Connection
             MySqlConnection conn = null;
 
+            //Database Location
+            //string cs = @"server= 127.0.0.1;userid=root;password=root;database=SampleRestaurantDatabase;port=8889";
+            //Output Location
+            //string _directory = @"../../output/";﻿﻿
+
+            string outputFolder = @"../../Output";
+            Directory.CreateDirectory(outputFolder);
+            
+            
+
             try
             {
-
                 // Open a connection to MySQL 
                 conn = new MySqlConnection(cs);
                 conn.Open();
@@ -27,7 +36,7 @@ namespace DataConvsersion
                 MySqlDataReader rdr = null;
 
                 // Form SQL Statement
-                string stm = "select restaurantName from restaurantprofiles";
+                string stm = "select * from restaurantprofiles";
 
                 // Prepare SQL Statement
                 MySqlCommand cmd = new MySqlCommand(stm, conn);
@@ -35,17 +44,39 @@ namespace DataConvsersion
                 //Execute SQL Statement
                 rdr = cmd.ExecuteReader();
                 // Execute SQL Statement and Convert Results to a String
-                // -string version = Convert.ToString(cmd.ExecuteScalar());
+                List<string> columnNames = new List<string>();
 
-                //Loop Through rows returned from mysql
-                while (rdr.Read())
+                for (int i = 0; i < rdr.FieldCount; i++)
                 {
-                    //output the first 3 columns returned
-                    Console.WriteLine(rdr.GetString(0));
+                    columnNames.Add(rdr.GetName(i));
                 }
-                // Output Results
-                //Console.WriteLine("MySQL version : {0}", version);
 
+                using (StreamWriter outStream = new StreamWriter(outputFolder + $@"/ResterauntProfiles.json"))
+                {
+                    outStream.WriteLine($"[");
+                    //Loop Through rows returned from mysql
+                    while (rdr.Read())
+                    {
+                        outStream.WriteLine("{");
+                        outStream.WriteLine($"\"{columnNames[0]}\" : {NullChecker(rdr, 0)},");
+                        outStream.WriteLine($"\"{columnNames[1]}\" : {NullChecker(rdr, 1)},");
+                        outStream.WriteLine($"\"{columnNames[2]}\" : {NullChecker(rdr, 2)},");
+                        outStream.WriteLine($"\"{columnNames[3]}\" : {NullChecker(rdr, 3)},");
+                        outStream.WriteLine($"\"{columnNames[4]}\" : {NullChecker(rdr, 4)},");
+                        outStream.WriteLine($"\"{columnNames[5]}\" : {NullChecker(rdr, 5)},");
+                        outStream.WriteLine($"\"{columnNames[6]}\" : {NullChecker(rdr, 6)},");
+                        outStream.WriteLine($"\"{columnNames[7]}\" : {NullChecker(rdr, 7)},");
+                        outStream.WriteLine($"\"{columnNames[8]}\" : {NullChecker(rdr, 8)},");
+                        outStream.WriteLine($"\"{columnNames[9]}\" : {NullChecker(rdr, 9)},");
+                        outStream.WriteLine($"\"{columnNames[10]}\" : {NullChecker(rdr, 10)},");
+                        outStream.WriteLine($"\"{columnNames[11]}\" : {NullChecker(rdr, 11)},");
+                        outStream.WriteLine($"\"{columnNames[12]}\" : {NullChecker(rdr, 12)},");
+                        outStream.WriteLine($"\"{columnNames[13]}\" : {NullChecker(rdr, 13)},");
+                        outStream.WriteLine("},");
+                    }
+                    outStream.WriteLine($"]");
+
+                }
             }
             catch (MySqlException ex)
             {
@@ -59,14 +90,25 @@ namespace DataConvsersion
                 }
             }
             Console.WriteLine("Done");
+
             Console.ReadKey();
         }
 
+        
         public static void ConvertToJSON()
         {
             Console.WriteLine("Converted");
 
             Utility.WaitForKey("Press Enter to return to Main Menu...");
+        }
+
+        public static string NullChecker(MySqlDataReader rdr, int columnNumber)
+        {
+            if(!rdr.IsDBNull(columnNumber))
+            {
+                return rdr.GetString(columnNumber);
+            }
+            return "null";
         }
        
     }
