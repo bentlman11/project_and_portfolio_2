@@ -8,8 +8,8 @@ namespace DataConvsersion
 {
     class ConvertJSON
     {
-
-        public static void ConnectToSQL()
+        //NEEDS to have a Dictionary of Int(entry number) and List<string> for reader's entry
+        public static void ConvertSQL()
         {
             // MySQL Database Connection String
             string cs = @"server=192.168.201.1;userid=dbremoteuser;password=password;database=samplerestaurantdatabase;port=8889";
@@ -19,11 +19,10 @@ namespace DataConvsersion
             //Database Location
             //string cs = @"server= 127.0.0.1;userid=root;password=root;database=SampleRestaurantDatabase;port=8889";
             //Output Location
-            //string _directory = @"../../output/";﻿﻿
+            //string outputFolder = @"../../output/";﻿﻿
 
             string outputFolder = @"../../Output/";
             Directory.CreateDirectory(outputFolder);
-            
 
             try
             {
@@ -41,41 +40,157 @@ namespace DataConvsersion
                 MySqlCommand cmd = new MySqlCommand(stm, conn);
 
                 //Execute SQL Statement
-                rdr = cmd.ExecuteReader();
-                // Execute SQL Statement and Convert Results to a String
-                List<string> columnNames = new List<string>();
-
-                for (int i = 0; i < rdr.FieldCount; i++)
+                using (rdr = cmd.ExecuteReader())
                 {
-                    columnNames.Add(rdr.GetName(i));
-                }
 
-                StreamWriter outStream = new StreamWriter(outputFolder + $@"/ResterauntProfiles.txt");
-                
-                    outStream.WriteLine($"[");
-                    
-                    while (rdr.Read())
+                    List<string> columnNames = new List<string>();
+
+                    //columns
+                    for (int i = 0; i < rdr.FieldCount; i++)
                     {
-                    outStream.WriteLine("{");
-                    outStream.WriteLine($"\"{columnNames[0]}\" : {NullChecker(rdr, 0)},");
-                    outStream.WriteLine($"\"{columnNames[1]}\" : {NullChecker(rdr, 1)},");
-                    outStream.WriteLine($"\"{columnNames[2]}\" : {NullChecker(rdr, 2)},");
-                    outStream.WriteLine($"\"{columnNames[3]}\" : {NullChecker(rdr, 3)},");
-                    outStream.WriteLine($"\"{columnNames[4]}\" : {NullChecker(rdr, 4)},");
-                    outStream.WriteLine($"\"{columnNames[5]}\" : {NullChecker(rdr, 5)},");
-                    outStream.WriteLine($"\"{columnNames[6]}\" : {NullChecker(rdr, 6)},");
-                    outStream.WriteLine($"\"{columnNames[7]}\" : {NullChecker(rdr, 7)},");
-                    outStream.WriteLine($"\"{columnNames[8]}\" : {NullChecker(rdr, 8)},");
-                    outStream.WriteLine($"\"{columnNames[9]}\" : {NullChecker(rdr, 9)},");
-                    outStream.WriteLine($"\"{columnNames[10]}\" : {NullChecker(rdr, 10)},");
-                    outStream.WriteLine($"\"{columnNames[11]}\" : {NullChecker(rdr, 11)},");
-                    outStream.WriteLine($"\"{columnNames[12]}\" : {NullChecker(rdr, 12)},");
-                    outStream.WriteLine($"\"{columnNames[13]}\" : {NullChecker(rdr, 13)},");
-                    outStream.WriteLine("},");
+                        columnNames.Add(rdr.GetName(i));
                     }
 
-                    outStream.WriteLine($"]");
-                
+                    StreamWriter outStream = new StreamWriter(outputFolder + $@"/ResterauntProfiles.JSON");
+
+                    List<string> sqlList = new List<string>();
+
+                    sqlList.Add($"[");
+
+                    while (rdr.Read())
+                    {
+                        sqlList.Add("{");
+                        sqlList.Add($"\"{columnNames[0]}\" : \"{Utility.NullChecker(rdr, 0)}\",");
+                        sqlList.Add($"\"{columnNames[1]}\" : \"{Utility.NullChecker(rdr, 1)}\",");
+                        sqlList.Add($"\"{columnNames[2]}\" : \"{Utility.NullChecker(rdr, 2)}\",");
+                        sqlList.Add($"\"{columnNames[3]}\" : \"{Utility.NullChecker(rdr, 3)}\",");
+                        sqlList.Add($"\"{columnNames[4]}\" : \"{Utility.NullChecker(rdr, 4)}\",");
+                        sqlList.Add($"\"{columnNames[5]}\" : \"{Utility.NullChecker(rdr, 5)}\",");
+                        sqlList.Add($"\"{columnNames[6]}\" : \"{Utility.NullChecker(rdr, 6)}\",");
+                        sqlList.Add($"\"{columnNames[7]}\" : \"{Utility.NullChecker(rdr, 7)}\",");
+                        sqlList.Add($"\"{columnNames[8]}\" : \"{Utility.NullChecker(rdr, 8)}\",");
+                        sqlList.Add($"\"{columnNames[9]}\" : \"{Utility.NullChecker(rdr, 9)}\",");
+                        sqlList.Add($"\"{columnNames[10]}\" : \"{Utility.NullChecker(rdr, 10)}\",");
+                        sqlList.Add($"\"{columnNames[11]}\" : \"{Utility.NullChecker(rdr, 11)}\",");
+                        sqlList.Add($"\"{columnNames[12]}\" : \"{Utility.NullChecker(rdr, 12)}\",");
+                        sqlList.Add($"\"{columnNames[13]}\" : \"{Utility.NullChecker(rdr, 13)}\"");
+                        sqlList.Add("},");
+                    }
+
+                    sqlList.RemoveAt(sqlList.Count - 1);
+                    sqlList.Add("}");
+                    sqlList.Add($"]");
+
+                    foreach (string row in sqlList)
+                    {
+                        outStream.WriteLine(row);
+                        outStream.Flush();
+                    }
+
+
+                    rdr.Dispose();
+                    /////////////////////////////
+
+                    // Form SQL Statement
+                    stm = "select * from RestaurantReviewers";
+
+                    // Prepare SQL Statement
+                    cmd = new MySqlCommand(stm, conn);
+
+                    //Execute SQL Statement
+                    rdr = cmd.ExecuteReader();
+
+                    List<string> columnNamesTwo = new List<string>();
+
+                    //columns
+                    for (int i = 0; i < rdr.FieldCount; i++)
+                    {
+                        columnNamesTwo.Add(rdr.GetName(i));
+                    }
+
+                    StreamWriter outStreamTwo = new StreamWriter(outputFolder + $@"/ResterauntReviewers.JSON");
+
+                    List<string> sqlListTwo = new List<string>();
+
+                    sqlListTwo.Add($"[");
+
+                    while (rdr.Read())
+                    {
+                        sqlListTwo.Add("{");
+                        sqlListTwo.Add($"\"{columnNamesTwo[0]}\" : \"{Utility.NullChecker(rdr, 0)}\",");
+                        sqlListTwo.Add($"\"{columnNamesTwo[1]}\" : \"{Utility.NullChecker(rdr, 1)}\",");
+                        sqlListTwo.Add($"\"{columnNamesTwo[2]}\" : \"{Utility.NullChecker(rdr, 2)}\",");
+                        sqlListTwo.Add($"\"{columnNamesTwo[3]}\" : \"{Utility.NullChecker(rdr, 3)}\",");
+                        sqlListTwo.Add($"\"{columnNamesTwo[4]}\" : \"{Utility.NullChecker(rdr, 4)}\",");
+                        sqlListTwo.Add($"\"{columnNamesTwo[5]}\" : \"{Utility.NullChecker(rdr, 5)}\",");
+                        sqlListTwo.Add($"\"{columnNamesTwo[6]}\" : \"{Utility.NullChecker(rdr, 6)}\",");
+                        sqlListTwo.Add($"\"{columnNamesTwo[7]}\" : \"{Utility.NullChecker(rdr, 7)}\"");
+
+                        sqlListTwo.Add("},");
+                    }
+
+                    sqlListTwo.RemoveAt(sqlListTwo.Count - 1);
+                    sqlListTwo.Add("}");
+                    sqlListTwo.Add($"]");
+
+                    foreach (string row in sqlListTwo)
+                    {
+                        outStreamTwo.WriteLine(row);
+                        outStreamTwo.Flush();
+                    }
+                    rdr.Dispose();
+                    /////////////////////////////
+
+                    // Form SQL Statement
+                    stm = "select * from RestaurantReviews";
+
+                    // Prepare SQL Statement
+                    cmd = new MySqlCommand(stm, conn);
+
+                    //Execute SQL Statement
+                    rdr = cmd.ExecuteReader();
+
+                    List<string> columnNamesThree = new List<string>();
+
+                    //columns
+                    for (int i = 0; i < rdr.FieldCount; i++)
+                    {
+                        columnNamesThree.Add(rdr.GetName(i));
+                    }
+
+                    StreamWriter outStreamThree = new StreamWriter(outputFolder + $@"/ResterauntReviews.JSON");
+
+                    List<string> sqlListThree = new List<string>();
+
+                    sqlListThree.Add($"[");
+
+                    while (rdr.Read())
+                    {
+                        sqlListThree.Add("{");
+                        sqlListThree.Add($"\"{columnNamesThree[0]}\" : \"{Utility.NullChecker(rdr, 0)}\",");
+                        sqlListThree.Add($"\"{columnNamesThree[1]}\" : \"{Utility.NullChecker(rdr, 1)}\",");
+                        sqlListThree.Add($"\"{columnNamesThree[2]}\" : \"{Utility.NullChecker(rdr, 2)}\",");
+                        sqlListThree.Add($"\"{columnNamesThree[3]}\" : \"{Utility.NullChecker(rdr, 3)}\",");
+                        sqlListThree.Add($"\"{columnNamesThree[4]}\" : \"{Utility.NullChecker(rdr, 4)}\",");
+                        sqlListThree.Add($"\"{columnNamesThree[5]}\" : \"{Utility.NullChecker(rdr, 5)}\"");
+
+                        sqlListThree.Add("},");
+                    }
+
+                    sqlListThree.RemoveAt(sqlListThree.Count - 1);
+                    sqlListThree.Add("}");
+                    sqlListThree.Add($"]");
+
+                    foreach (string row in sqlListThree)
+                    {
+                        outStreamThree.WriteLine(row);
+                        outStreamThree.Flush();
+                    }
+
+                    outStreamThree.Close();
+                    outStreamTwo.Close();
+                    outStream.Close();
+                }
             }
             catch (MySqlException ex)
             {
@@ -88,27 +203,22 @@ namespace DataConvsersion
                     conn.Close();
                 }
             }
-            Console.WriteLine("Done");
-            Console.WriteLine(Path.GetFullPath(outputFolder));
-            Console.ReadKey();
+
+            
+            ConvertToJSON(outputFolder);
+        }
+        
+        private static void ConvertToJSON(string output)
+        {
+            Console.WriteLine("SQL tables Converted to JSON");
+            Console.WriteLine($"JSON files are at: {Path.GetFullPath(output)}");
+            Console.WriteLine("");
+            Utility.WaitForKey("Press Enter to return to Main Menu...");
+
+            Console.Clear();
         }
 
         
-        public static void ConvertToJSON()
-        {
-            Console.WriteLine("Converted");
-
-            Utility.WaitForKey("Press Enter to return to Main Menu...");
-        }
-
-        public static string NullChecker(MySqlDataReader rdr, int columnNumber)
-        {
-            if(!rdr.IsDBNull(columnNumber))
-            {
-                return rdr.GetString(columnNumber);
-            }
-            return "null";
-        }
        
     }
 }
